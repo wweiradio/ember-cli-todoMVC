@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Tryit</title>
+    <title>Ember.js • TodoMVC Tryit </title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -12,14 +12,76 @@
     <link rel="stylesheet" href="assets/vendor.css">
     <link rel="stylesheet" href="assets/tryit.css">
 
-    {{content-for 'head-footer'}}
+    {{content-for 'head-footer'}} 
+
   </head>
   <body>
-    {{content-for 'body'}}
+    <script type="text/x-handlebars" data-template-name="todos/index" >
+    <ul id="todo-list">
+        {{#each todo in model itemController="todo"}}
+          <li {{bind-attr class="todo.isCompleted:completed todo.isEditing:editing"}}>
+            {{#if todo.isEditing}}
+            {{todo-text-field class="edit" value=todo.title focus-out="acceptChanges" insert-newline="acceptChanges"}}
+            {{else}}
+            {{input type="checkbox" checked=todo.isCompleted class="toggle"}} 
+            <label {{action "editTodo" on="doubleClick"}}>{{todo.title}}</label><button {{action "removeTodo"}} class="destroy"></button>
+            {{/if}}
+          </li>
+        {{/each}}
+
+    </ul>
+    </script>
+
+
+    <script type="text/x-handlebars" data-template-name="todos" >
+    <section id="todoapp">
+      <header id="header">
+        <h1>Todos</h1>
+
+        {{input type="text" id="new-todo" placeholder="what needs to be done?"
+        value=newTitle action="createTodo"}}
+      </header>
+
+      <section id="main">
+        {{outlet}}
+        {{input type="checkbox" id="toggle-all" checked=allAreDone}}
+      </section>
+
+      <footer id="footer">
+        <span id="todo-count">
+          <strong>{{remaining}}</strong> {{inflection}} todos left
+        </span>
+        <ul id="filters">
+          <li>
+            {{#link-to "todos.index" activeClass="selected"}}All{{/link-to}}
+          </li>
+          <li>            
+            {{#link-to "todos.active" activeClass="selected"}}Active{{/link-to}}
+          </li>
+          <li>
+            {{#link-to "todos.completed" activeClass="selected"}}Completed{{/link-to}}
+          </li>
+        </ul>
+
+        {{#if hasCompleted}}
+        <button id="clear-completed" {{action "clearCompleted"}}>
+          Clear completed ({{completed}})
+        </button>
+        {{/if}}
+
+      </footer>
+    </section>
+
+    <footer id="info">
+      <p>Double-click to edit a todo</p>
+    </footer>
+
+    </script>
+
 
     <script src="assets/vendor.js"></script>
     <script src="assets/tryit.js"></script>
 
-    {{content-for 'body-footer'}}
   </body>
 </html>
+

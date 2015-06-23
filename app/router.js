@@ -6,6 +6,13 @@ var Router = Ember.Router.extend({
 });
 
 Router.map(function() {
+    //tell that when url /, render todos template
+    this.resource('todos', { path: '/' }, function() {
+        //additional child routes will go here later
+        this.route('active');
+        this.route('completed');
+    });
+
 });
 
 export default Router;
